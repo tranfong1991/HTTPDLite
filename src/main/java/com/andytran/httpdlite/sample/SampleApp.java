@@ -15,14 +15,14 @@ public class SampleApp {
 
 		@Override
 		public void handle(HttpSession session) {
-			System.out.println("HERE");
+			System.out.println(session);
 		}
 		
 	}
 	
 	public static void main(String[] args) {
 		try {
-			HttpdLite server = new MyHttpdLite(1003);
+			HttpdLite server = new MyHttpdLite(8080);
 			server.start();
 		} catch (IOException e) {
 			e.printStackTrace();

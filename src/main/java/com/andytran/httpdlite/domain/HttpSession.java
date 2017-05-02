@@ -1,20 +1,28 @@
 package com.andytran.httpdlite.domain;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class HttpSession {
 	
-	public String queryPath;
+	public String uri;
 	public Map<String, String> params;
 	public HttpMethod method;
 	public String body;
 	
-	public String getQueryPath() {
-		return queryPath;
+	public HttpSession(){
+		this.uri = null;
+		this.params = new HashMap<>();
+		this.method = null;
+		this.body = null;
 	}
 	
-	public void setQueryPath(String queryPath) {
-		this.queryPath = queryPath;
+	public String getUri() {
+		return uri;
+	}
+	
+	public void setUri(String uri) {
+		this.uri = uri;
 	}
 	
 	public Map<String, String> getParams() {
@@ -23,6 +31,18 @@ public class HttpSession {
 	
 	public void setParams(Map<String, String> params) {
 		this.params = params;
+	}
+	
+	public void addParam(String key, String val){
+		if(key == null || key.isEmpty())
+			return;
+		this.params.put(key, val);
+	}
+	
+	public void removeParam(String key){
+		if(key == null || key.isEmpty())
+			return;
+		this.params.remove(key);
 	}
 	
 	public HttpMethod getMethod() {
@@ -39,6 +59,11 @@ public class HttpSession {
 	
 	public void setBody(String body){
 		this.body = body;
+	}
+
+	@Override
+	public String toString() {
+		return "HttpSession [uri=" + uri + ", params=" + params + ", method=" + method + ", body=" + body + "]";
 	}
 	
 }
