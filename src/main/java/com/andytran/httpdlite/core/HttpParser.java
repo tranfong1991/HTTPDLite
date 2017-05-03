@@ -2,35 +2,35 @@ package com.andytran.httpdlite.core;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Map;
 
 import com.andytran.httpdlite.domain.HttpMethod;
 import com.andytran.httpdlite.domain.HttpSession;
 
 public class HttpParser {
-
+	
 	public static HttpSession parse(BufferedReader in) throws IOException{
 		HttpSession session = new HttpSession();
 		
-//		parseRequestLine(session, in.readLine());
-//		
-//		String line;
-//		while(in.ready()){
-//			if((line = in.readLine()) != null 
-//					&& !line.isEmpty()){
-//				parseHeader(session, line);
-//			}
-//		}
-//		
-//		while(in.ready()){
-//			if((line = in.readLine()) != null)
-//				parseBody(session, line);
-//		}
+		parseRequestLine(session, in.readLine());
 		
-		char[] buffer = new char[1024];
-		while(in.ready()){
-			in.read(buffer, 0, 1024);
+		String line;
+		while((line = in.readLine()) != null){
+			if(line.isEmpty())
+				break;
+			parseHeader(session, line);
 		}
-		System.out.println(buffer);
+		
+		Map<String, String> params = session.getParams();
+		int contentLength = 0;
+		if(params.containsKey("Content-Length"))
+			contentLength = Integer.valueOf(params.get("Content-Length"));
+		
+		if(contentLength > 0){
+			char[] buffer = new char[contentLength];
+			in.read(buffer);
+			session.setBody(new String(buffer));
+		}
 		
 		return session;
 	}
@@ -50,10 +50,6 @@ public class HttpParser {
 		if(tokens.length > 0){
 			session.addParam(tokens[0], tokens[1]);
 		}
-	}
-	
-	private static void parseBody(HttpSession session, String line){
-		session.setBody(line);
 	}
 	
 }
