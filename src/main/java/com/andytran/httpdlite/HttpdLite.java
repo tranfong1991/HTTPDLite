@@ -1,12 +1,15 @@
 package com.andytran.httpdlite;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 import com.andytran.httpdlite.core.HttpParser;
+import com.andytran.httpdlite.domain.HttpResponse;
 import com.andytran.httpdlite.domain.HttpSession;
 
 public abstract class HttpdLite {
@@ -15,11 +18,19 @@ public abstract class HttpdLite {
 	private ServerSocket serverSocket; 
 	
 	public HttpdLite(int port) throws IOException{
-		this.setPort(port);
+		this.port = port;
 		this.serverSocket = new ServerSocket(port);
 	}
 	
-	public abstract void handle(HttpSession session);
+	public int getPort() {
+		return port;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
+	}
+	
+	public abstract HttpResponse handle(HttpSession session);
 	
 	public void start() throws IOException{
 //		while(true){
@@ -30,7 +41,13 @@ public abstract class HttpdLite {
 			BufferedReader in = new BufferedReader(new InputStreamReader(newConnection.getInputStream()));
 			
 			HttpSession session = HttpParser.parse(in);
-			handle(session);
+			HttpResponse response = handle(session);
+			
+			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(newConnection.getOutputStream()));
+			out.write(response.toString());
+			
+			out.flush();
+			out.close();
 			
 			newConnection.close();
 //		}
@@ -38,14 +55,6 @@ public abstract class HttpdLite {
 	
 	public void stop() throws IOException{
 		this.serverSocket.close();
-	}
-
-	public int getPort() {
-		return port;
-	}
-
-	public void setPort(int port) {
-		this.port = port;
 	}
 	
 }

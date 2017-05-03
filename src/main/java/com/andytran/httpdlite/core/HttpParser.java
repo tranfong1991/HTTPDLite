@@ -16,6 +16,7 @@ public class HttpParser {
 		
 		String line;
 		while((line = in.readLine()) != null){
+			//when reach the end of the header
 			if(line.isEmpty())
 				break;
 			parseHeader(session, line);
