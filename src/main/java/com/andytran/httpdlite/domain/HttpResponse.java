@@ -82,8 +82,28 @@ public class HttpResponse {
 
 	@Override
 	public String toString() {
-		return "HttpResponse [httpVersion=" + httpVersion + ", statusCode=" + statusCode + ", params=" + params
-				+ ", body=" + body + "]";
+		StringBuilder builder = new StringBuilder();
+		builder.append("HTTP/")
+			.append(httpVersion)
+			.append(" ")
+			.append(statusCode)
+			.append(" ")
+			.append(HttpStatus.getCodeStr(statusCode))
+			.append("\r\n");
+		
+		for(String key : params.keySet()){
+			builder.append(key)
+				.append(": ")
+				.append(params.get(key))
+				.append("\r\n");
+		}
+		
+		if(body != null && !body.isEmpty()){
+			builder.append("\r\n");
+			builder.append(body);
+		}
+				
+		return builder.toString();
 	}
 	
 }

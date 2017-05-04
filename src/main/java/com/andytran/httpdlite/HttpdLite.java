@@ -44,6 +44,9 @@ public abstract class HttpdLite {
 			HttpResponse response = handle(session);
 			
 			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(newConnection.getOutputStream()));
+			
+			System.out.println(response.toString());
+			
 			out.write(response.toString());
 			
 			out.flush();

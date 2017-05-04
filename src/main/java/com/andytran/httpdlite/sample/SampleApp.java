@@ -20,7 +20,6 @@ public class SampleApp {
 			HttpResponse response = new HttpResponse.Builder()
 					.statusCode(HttpStatus.OK)
 					.httpVersion("1.0")
-					.body("Hello There")
 					.param("Accept", "application/json")
 					.param("Server", "HttpdLite")
 					.build();
