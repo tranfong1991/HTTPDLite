@@ -33,27 +33,32 @@ public abstract class HttpdLite {
 	public abstract HttpResponse handle(HttpSession session);
 	
 	public void start() throws IOException{
-//		while(true){
-			System.out.println("Waiting for connection");
+		System.out.println("Server started.");
+		while(true){
 			Socket newConnection = this.serverSocket.accept();
-			
-			System.out.println("Connected to " + newConnection.getRemoteSocketAddress());
 			BufferedReader in = new BufferedReader(new InputStreamReader(newConnection.getInputStream()));
-			
 			HttpSession session = HttpParser.parse(in);
-			HttpResponse response = handle(session);
 			
-			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(newConnection.getOutputStream()));
-			
-			System.out.println(response.toString());
-			
-			out.write(response.toString());
-			
-			out.flush();
-			out.close();
-			
-			newConnection.close();
-//		}
+			new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					HttpResponse response = handle(session);
+										
+					try {
+						BufferedWriter out = new BufferedWriter(new OutputStreamWriter(newConnection.getOutputStream()));
+
+						out.write(response.toString());
+						out.flush();
+						out.close();
+						
+						newConnection.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}).start();
+		}
 	}
 	
 	public void stop() throws IOException{

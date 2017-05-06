@@ -2,6 +2,10 @@ package com.andytran.httpdlite.sample;
 
 import java.io.IOException;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.andytran.httpdlite.HttpdLite;
 import com.andytran.httpdlite.domain.HttpResponse;
 import com.andytran.httpdlite.domain.HttpSession;
@@ -17,11 +21,25 @@ public class SampleApp {
 
 		@Override
 		public HttpResponse handle(HttpSession session) {
+			JSONObject json = new JSONObject();
+			try {
+				json.put("status", "OK");
+				
+				JSONArray arr = new JSONArray();
+				arr.put(200);
+				arr.put(false);
+				
+				json.put("myArray", arr);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			
 			HttpResponse response = new HttpResponse.Builder()
 					.statusCode(HttpStatus.OK)
 					.httpVersion("1.0")
 					.param("Accept", "application/json")
-					.param("Server", "HttpdLite")
+					.param("Server", "HttpdLite1.0")
+					.body(json)
 					.build();
 						
 			return response;

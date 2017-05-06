@@ -3,6 +3,8 @@ package com.andytran.httpdlite.domain;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONObject;
+
 public class HttpResponse {
 	public static final class Builder{
 		private HttpResponse response;
@@ -23,6 +25,11 @@ public class HttpResponse {
 		
 		public Builder body(String body){
 			response.setBody(body);
+			return this;
+		}
+		
+		public Builder body(JSONObject json){
+			response.setBody(json.toString());
 			return this;
 		}
 		
