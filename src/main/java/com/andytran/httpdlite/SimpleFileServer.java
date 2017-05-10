@@ -11,7 +11,7 @@ import com.andytran.httpdlite.domain.HttpSession;
 
 public class SimpleFileServer extends HttpdLite {
 	
-	private final int MAX_BUF_SIZE = 1024;
+	private final int MAX_BUF_SIZE = 2;
 	
 	private String rootDir;
 
@@ -43,7 +43,7 @@ public class SimpleFileServer extends HttpdLite {
 			
 			while(reader.ready()){
 				if(offset >= buf.length - 1)
-					resize(buf);
+					buf = resize(buf);
 				
 				int bytes = reader.read(buf, offset, MAX_BUF_SIZE);
 				if(bytes < 0)
@@ -70,13 +70,14 @@ public class SimpleFileServer extends HttpdLite {
 		return response;
 	}
 
-	private void resize(char[] buf){
+	private char[] resize(char[] buf){
 		char[] old = buf;
 		buf = new char[old.length * 2];
 		
 		for(int i = 0; i < old.length; i++){
 			buf[i] = old[i];
 		}
+		return buf;
 	}
 	
 }
