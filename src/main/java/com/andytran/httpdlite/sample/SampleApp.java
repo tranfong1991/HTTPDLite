@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.andytran.httpdlite.HttpdLite;
+import com.andytran.httpdlite.SimpleFileServer;
 import com.andytran.httpdlite.domain.HttpResponse;
 import com.andytran.httpdlite.domain.HttpSession;
 import com.andytran.httpdlite.domain.HttpStatus;
@@ -36,9 +37,6 @@ public class SampleApp {
 			
 			HttpResponse response = new HttpResponse.Builder()
 					.statusCode(HttpStatus.OK)
-					.httpVersion("1.0")
-					.param("Accept", "application/json")
-					.param("Server", "HttpdLite1.0")
 					.body(json)
 					.build();
 						
@@ -49,7 +47,10 @@ public class SampleApp {
 	
 	public static void main(String[] args) {
 		try {
-			HttpdLite server = new MyHttpdLite(8080);
+//			HttpdLite server = new MyHttpdLite(8080);
+//			server.start();
+			
+			HttpdLite server = new SimpleFileServer("C:/Users/Andy Tran/Documents/Programming Projects/Personal Projects/HTTPDLite/");
 			server.start();
 		} catch (IOException e) {
 			e.printStackTrace();

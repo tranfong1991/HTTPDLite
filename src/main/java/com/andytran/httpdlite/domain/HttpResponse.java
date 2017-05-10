@@ -51,7 +51,11 @@ public class HttpResponse {
 	public HttpResponse(){
 		this.httpVersion = "1.1";
 		this.statusCode = HttpStatus.OK;
+		
 		this.params = new HashMap<>();
+		params.put("Server", "HttpdLite 1.0");
+		params.put("Accept", "application/json");
+		
 		this.body = null;
 	}
 	
