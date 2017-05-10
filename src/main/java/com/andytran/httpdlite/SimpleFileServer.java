@@ -1,7 +1,6 @@
 package com.andytran.httpdlite;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -30,22 +29,24 @@ public class SimpleFileServer extends HttpdLite {
 
 	@Override
 	public HttpResponse handle(HttpSession session) {
-		String uri = session.getUri();
 		BufferedReader reader = null;
 		HttpResponse response = null;
 		
 		try {
-			File file = new File(this.rootDir + uri);
-			reader = new BufferedReader(new FileReader(file));
+			String uri = session.getUri();
+			reader = new BufferedReader(new FileReader(this.rootDir + uri));
 			
 			char[] buf = new char[MAX_BUF_SIZE];
 			int offset = 0;
 			
 			while(reader.ready()){
+				//when offset is at the end or exceeds the limit of the buffer
 				if(offset >= buf.length - 1)
 					buf = resize(buf);
-				
+		
 				int bytes = reader.read(buf, offset, MAX_BUF_SIZE);
+				
+				//read() returns -1 when at the end of file
 				if(bytes < 0)
 					break;
 				offset += bytes;

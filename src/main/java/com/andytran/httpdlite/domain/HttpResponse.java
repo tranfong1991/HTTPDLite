@@ -48,7 +48,7 @@ public class HttpResponse {
 	private Map<String, String> params;
 	private String body;
 	
-	public HttpResponse(){
+	private HttpResponse(){
 		this.httpVersion = "1.1";
 		this.statusCode = HttpStatus.OK;
 		
